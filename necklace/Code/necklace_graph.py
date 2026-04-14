@@ -340,7 +340,7 @@ def run_experiment(l_values):
 if __name__ == "__main__":
     
     # ── Detailed run for l=8 (the image graph) ───────────
-    l = 20
+    l = 8
     adj      = build_necklace_graph(l)
     label, k = nl3_backtrack(l)
     
@@ -351,4 +351,4 @@ if __name__ == "__main__":
     
     # ── Tabulate results for multiple values of l ─────────
     print("\n")
-    run_experiment([4, 5, 6, 7, 8, 10, 15, 20, 50, 90, 100])
+    run_experiment([4, 5, 6, 7, 8, 10, 15, 20, 50])
