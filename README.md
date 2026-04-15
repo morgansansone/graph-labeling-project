@@ -1,5 +1,5 @@
 # Assignment 2
-**COMP-SCI 5592 | UMKC**
+**COMP-SCI 5592 | UMKC** |
 **Topic:** Vertex k-Labeling of Graphs using Algorithmic Approach
 
 ---
