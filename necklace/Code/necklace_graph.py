@@ -8,7 +8,16 @@ from graph_builder import build_necklace_graph
 # Returns: List of vertices in the order they will be labeled.
 
 def build_order(l):
-    """Fixed vertex processing order for backtracking"""
+    """Fixed vertex processing order for backtracking.
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+                 Determines the structure and size of the vertex ordering.
+    
+    Returns:
+        list: Ordered list of vertices (tuples) to be processed during backtracking.
+              High-degree vertices (m2 and m_{l-1}) are placed last to reduce backtracks.
+    """
     order = []
     
     # Left cross section (m2 last — degree 5)
@@ -34,8 +43,17 @@ def is_valid(v, c, adj, label, used_weights):
     """
     Check if assigning label c to vertex v causes
     any edge weight conflict with already-labeled neighbors.
-    Returns: (bool, set) - True if valid with set of new edge weights,
-                          False with empty set if conflict detected.
+    
+    Args:
+        v (tuple): Vertex identifier (type, index) to check.
+        c (int): Candidate label value to test for vertex v.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Current vertex labels, mapping vertices to their assigned values.
+        used_weights (set): Set of edge weights already committed in the current solution.
+    
+    Returns:
+        tuple: (bool, set) - True with set of new edge weights if valid,
+               False with empty set if conflict detected.
     """
     new_weights = set()
     
@@ -64,7 +82,16 @@ def is_valid(v, c, adj, label, used_weights):
 
 def commit_label(v, c, adj, label, used_weights):
     """Assign label c to v and record all new edge weights.
-    Returns: None (modifies label and used_weights in-place).
+    
+    Args:
+        v (tuple): Vertex identifier (type, index) to label.
+        c (int): Label value to assign to vertex v.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Current vertex labels (modified in-place).
+        used_weights (set): Set of edge weights (modified in-place with new values).
+    
+    Returns:
+        None (modifies label and used_weights in-place).
     """
     label[v] = c
     for u in adj[v]:
@@ -74,7 +101,15 @@ def commit_label(v, c, adj, label, used_weights):
 
 def revoke_label(v, adj, label, used_weights):
     """Remove v's label and all its edge weights from used set.
-    Returns: None (modifies label and used_weights in-place).
+    
+    Args:
+        v (tuple): Vertex identifier (type, index) whose label is to be removed.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Current vertex labels (modified in-place, vertex v reset to 0).
+        used_weights (set): Set of edge weights (modified in-place, v's weights removed).
+    
+    Returns:
+        None (modifies label and used_weights in-place).
     """
     c = label[v]
     for u in adj[v]:
@@ -95,8 +130,14 @@ def revoke_label(v, adj, label, used_weights):
 def nl3_backtrack(l):
     """
     Main backtracking algorithm for N_{l,3} necklace graph.
-    Returns: (dict, int) - vertex labels and edge irregularity strength,
-             or (None, None) if no solution found.
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+                 Defines the necklace graph N_{l,3} structure.
+    
+    Returns:
+        tuple: (dict, int) - vertex labels mapping vertices to their assigned values
+               and edge irregularity strength k, or (None, None) if no solution found.
     """
     print(f"\n{'='*60}")
     print(f"  NL3-Backtrack: Necklace Graph N_({l},3)")
@@ -157,7 +198,14 @@ def nl3_backtrack(l):
 
 def compute_edge_weights(l, adj, label):
     """Compute all edge weights and return as dict.
-    Returns: dict - maps (vertex, vertex) pairs to their edge weight (sum of labels).
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Vertex labels mapping vertices to their assigned values.
+    
+    Returns:
+        dict: Maps (vertex, vertex) pairs to their edge weight (sum of labels).
     """
     edge_weights = {}
     seen = set()
@@ -177,7 +225,15 @@ def compute_edge_weights(l, adj, label):
 
 def verify_solution(l, adj, label, k):
     """Verify all edge weights are distinct.
-    Returns: bool - True if all edge weights are unique, False otherwise.
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Vertex labels mapping vertices to their assigned values.
+        k (int): Maximum label used (edge irregularity strength).
+    
+    Returns:
+        bool: True if all edge weights are unique, False otherwise.
     """
     edge_weights = compute_edge_weights(l, adj, label)
     weights      = list(edge_weights.values())
@@ -210,7 +266,13 @@ def verify_solution(l, adj, label, k):
 
 def print_labels(l, label):
     """Print vertex labels in grid format.
-    Returns: None (displays output to console).
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+        label (dict): Vertex labels mapping vertices to their assigned values.
+    
+    Returns:
+        None (displays output to console).
     """
     print(f"\n{'='*60}")
     print(f"  VERTEX LABELS")
@@ -231,8 +293,15 @@ def print_labels(l, label):
 # bottom path, vertical connections, cross sections, and outer arcs).
 
 def print_edge_weights(l, adj, label):
-    """Print all edge weights.
-    Returns: None (displays output to console).
+    """Print all edge weights organized by category.
+    
+    Args:
+        l (int): Number of vertices in each of the top and bottom rows.
+        adj (defaultdict): Adjacency list mapping vertices to their neighbors.
+        label (dict): Vertex labels mapping vertices to their assigned values.
+    
+    Returns:
+        None (displays output to console).
     """
     print(f"\n{'='*60}")
     print(f"  EDGE WEIGHTS")
@@ -304,8 +373,14 @@ def print_edge_weights(l, adj, label):
 def run_experiment(l_values):
     """
     Run algorithm for multiple values of l and tabulate results.
-    Returns: list - tuples of (l, V, E, lower_bound, edge_strength, is_valid)
-             for each tested graph size.
+    
+    Args:
+        l_values (list): List of integers representing the parameter l values
+                         to test for different graph sizes.
+    
+    Returns:
+        list: Tuples of (l, V, E, lower_bound, edge_strength, is_valid)
+              for each tested graph size.
     """
     print(f"\n{'='*60}")
     print(f"  RESULTS TABLE")
