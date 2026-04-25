@@ -19,15 +19,15 @@
 ```
 graph-labeling-project/
 ├── README.md
-├── musical_graph/         
+├── musical/         
 │   ├── Code/
 │   │   ├── graph_builder.py
 │   │   └── musical_graph.py
 │   └── results.txt
-├── tripartite_graph/     
+├── tripartite/     
 │   ├── CTG_beam_search.py
 │   └── results.txt
-└── necklace_graph/    
+└── necklace/    
     ├── Code/
     │   ├── graph_builder.py
     │   └── necklace_graph.py
